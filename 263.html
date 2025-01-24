@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p></p>
+    <br>
+    <button onclick="clickme()">click to count</button>
+    <script>
+        let count=0;
+        document.querySelector("p").innerHTML=`total click ${count}`;
+        function clickme(){
+            document.querySelector("p").innerHTML=`total click ${count+=1}`;
+        }
+    </script>
+</html>

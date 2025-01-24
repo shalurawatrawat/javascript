@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="">Enter First Number</label>
+    <input id="fristNumber" type="text">
+    <br>
+    <br>
+    <label for="">Enter Second Number</label>
+    <input id="secondNumber" type="text">
+    <br>
+    <br>
+    <button onclick="addtion()">+</button>
+    <button onclick="subtraction()">-</button>
+    <button onclick="multiplication()">*</button>
+    <button onclick="divison()">/</button>
+    <button onclick="remender()">%</button>
+    <br>
+    <br>
+    <p></p>
+    <script>
+        function addtion(){
+            let fristNumber=document.getElementById("fristNumber").value;
+            let secondNumber=document.getElementById("secondNumber").value;
+            let result=document.querySelector("p");
+            result.innerHTML=parseInt(fristNumber)+parseInt(secondNumber);
+        }
+        function subtraction(){
+            let fristNumber=document.getElementById("fristNumber").value;
+            let secondNumber=document.getElementById("secondNumber").value;
+            let result=document.querySelector("p");
+            result.innerHTML=parseInt(fristNumber)-parseInt(secondNumber);
+        }
+        function multiplication(){
+            let fristNumber=document.getElementById("fristNumber").value;
+            let secondNumber=document.getElementById("secondNumber").value;
+            let result=document.querySelector("p");
+            result.innerHTML=parseInt(fristNumber)*parseInt(secondNumber);
+        }
+        function divison(){
+            let fristNumber=document.getElementById("fristNumber").value;
+            let secondNumber=document.getElementById("secondNumber").value;
+            let result=document.querySelector("p");
+            result.innerHTML=parseInt(fristNumber)/parseInt(secondNumber);
+        }
+        function remender(){
+            let fristNumber=document.getElementById("fristNumber").value;
+            let secondNumber=document.getElementById("secondNumber").value;
+            let result=document.querySelector("p");
+            result.innerHTML=parseInt(fristNumber)%parseInt(secondNumber);
+        }
+    </script>
+</body>
+</html>

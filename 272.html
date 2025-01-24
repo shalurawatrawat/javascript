@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="myform">
+        <Label>Name</Label>
+        <input id="name" type="text">
+        <br>
+        <br>
+        <Label>Address</Label>
+        <input id="address" type="text">
+        <br>
+        <br>
+        <Label>Phone</Label>
+        <input id="phone" type="text">
+        <br>
+        <br>
+        <Label>Email</Label>
+        <input id="email" type="text">
+        <br>
+        <br>
+        <button type="submit">submit</button>
+    </form>
+    <script>
+        document.getElementById("myform").addEventListener("submit",(event)=>{
+            let name=document.getElementById("name").value;
+            let address=document.getElementById("address").value;
+            let phone=document.getElementById("phone").value;
+            let email=document.getElementById("email").value;
+
+            if(!name||!address||!phone||!email){
+                alert('Field is Empty');
+                event.preventDefault();
+            }else{
+                alert('form submit successfully');
+            }
+        });
+    </script>
+</body>
+</html>

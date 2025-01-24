@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>first div</div>
+    <div>second div</div>
+    <div>third div</div>
+    <div>four div</div>
+
+    <p>first div</p>
+    <p>second div</p>
+    <p>third div</p>
+    <p>third div</p>
+    <h4 id="myId"></h4>
+    <h4 id="pId"></h4>
+    <script>
+        var divTag=document.querySelectorAll("div");
+        var pTag=document.querySelectorAll("p");
+        var id=document.getElementById("myId");
+        var pID=document.getElementById("pId");
+        var countDiv=0;
+        var countPtag=0;
+        divTag.forEach((x)=>{
+            countDiv+=1;
+        });
+        pTag.forEach((x)=>{
+            countPtag+=1;
+        })
+        id.innerHTML=`Total Div ${countDiv}`;
+        pID.innerHTML=`Total p tag ${countPtag}`;
+    </script>
+</body>
+</html>

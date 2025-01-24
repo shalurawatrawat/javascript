@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .highlight{
+        border: 2px solid #4CAF50; 
+        outline: none; 
+        background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <form id="myform">
+        <Label>Name</Label>
+        <input id="name" type="text">
+        <br>
+        <br>
+        <Label>Address</Label>
+        <input id="address" type="text">
+        <br>
+        <br>
+        <Label>Phone</Label>
+        <input id="phone" type="text">
+        <br>
+        <br>
+        <Label>Email</Label>
+        <input id="email" type="text">
+        <br>
+        <br>
+        <button type="submit">submit</button>
+    </form>
+    <script>
+        let input=document.querySelectorAll("input");
+        input.forEach(input=>{
+            input.addEventListener('focus',()=>{
+            input.classList.add("highlight");
+            })
+
+            input.addEventListener('blur',()=>{
+                input.classList.remove("highlight");
+            })
+        });
+    </script>
+</body>
+</html>

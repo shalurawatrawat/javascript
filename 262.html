@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .img{
+            width: 80%;
+        }
+        .styleimg{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://im.indiatimes.in/content/2024/Dec/marco-box-office-collection-day-1-unni-mukundan-brings-the-4th-biggest-mollywood-opening-001_676bb9b03e0c8.jpg?w=1200&h=900&cc=1&webp=1&q=75" alt="">
+    <br>
+    <button onclick="clickme()">Click to toggle</button>
+    <script>
+        function clickme(){
+            let imgage=document.querySelector("img");
+            imgage.classList.toggle("img");
+        }
+    </script>
+</body>
+</html>

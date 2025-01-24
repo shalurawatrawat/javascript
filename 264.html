@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            box-shadow: 0px 0px 1px 1px brown; 
+           padding: 20px;
+           text-align: center; 
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p>Chandu singh rawat</p>
+    </div>
+    <select name="color" id="color">
+        <option value="red">red</option>
+        <option value="green">green</option>
+        <option value="black">black</option>
+        <option value="blue">blue</option>
+      </select>
+      <br>
+      <br>
+      
+      <button onclick="changeColour()">Click to change colour</button>
+      <script>
+        function changeColour(){
+            let color=document.querySelector("select").value;
+            document.querySelector("div").style.background=color;
+        }
+      </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ol>
+        <li>itam 1</li>
+        <li>itam 2</li>
+    </ol>
+    <br>
+    <button onclick="clickme()">click to remove last itam</button>
+    <script>
+       function clickme(){
+           let list=document.querySelector("ol");
+           list.lastElementChild.remove();
+        }
+    </script>
+</body>
+</html>

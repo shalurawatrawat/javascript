@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=], initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="myform">
+    <label for="">Name</label>
+    <input id="name" type="text">
+    <br>
+    <br>
+    <label for="">phone</label>
+    <input id="phone" type="text">
+    <br>
+    <br>
+    <label for="">Email</label>
+    <input id="email" type="text">
+    <br>
+    <br>
+    <button type="submit">submit</button>
+  </form>
+  <script>
+    document.getElementById("myform").addEventListener("submit",(event)=>{
+        let name=document.getElementById("name").value;
+        let phone=document.getElementById("phone").value;
+        let email=document.getElementById("email").value;
+
+        console.log(name);
+        console.log(phone);
+        console.log(email);
+
+        if(!name||!phone||!email){
+            alert("please eneter value");
+            event.preventDefault();
+        }else{
+            alert("form submit succsefully");
+        }
+    });
+  </script>
+</body>
+</html>
