@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Required Input Alert</title>
+</head>
+<body>
+    <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
+    </form>
+    <script>
+        let inputField = document.getElementById("name");
+
+        inputField.addEventListener("blur", () => {
+            if (inputField.value.trim() === "") { 
+                alert("This field is required. Please fill it out.");
+                inputField.focus(); 
+            }
+        });
+    </script>
+</body>
+</html>

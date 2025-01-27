@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Iframe Content</title>
+</head>
+<body>
+    <h1>Dynamic Iframe Content</h1>
+    <button onclick="changeIframeContent()">Change Content</button>
+    <iframe id="myIframe" width="600" height="400" src="about:blank" style="border:1px solid #000;"></iframe>
+    <script>
+        function changeIframeContent() {
+            const iframe = document.getElementById("myIframe");
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write("<h2>New Content Loaded!</h2><p>This is some dynamically loaded content.</p>");
+            iframeDoc.close();
+        }
+    </script>
+
+</body>
+</html>

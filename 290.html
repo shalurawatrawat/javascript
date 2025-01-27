@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll to Top</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 2000px; 
+            margin: 0;
+            padding: 0;
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #scrollTopBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<button id="scrollTopBtn">↑ Top</button>
+
+<script>
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+    window.onscroll = function() {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            scrollTopBtn.style.display = "block"; 
+        } else {
+            scrollTopBtn.style.display = "none"; 
+        }
+    };
+    scrollTopBtn.onclick = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" 
+        });
+    };
+</script>
+
+</body>
+</html>

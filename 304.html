@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drag and Drop</title>
+<style>
+  #draggable {
+    width: 150px;
+    height: 150px;
+    background-color: lightblue;
+    border: 1px solid black;
+    cursor: move;
+    position: absolute;
+  }
+</style>
+</head>
+<body>
+
+<div id="draggable" draggable="true">Drag Me</div>
+
+<script>
+  const draggable = document.getElementById('draggable');
+
+  draggable.addEventListener('dragstart', (event) => {
+    event.dataTransfer.setData('text/plain', 'Dragging');
+    event.dataTransfer.effectAllowed = 'move';
+  });
+
+  draggable.addEventListener('dragend', (event) => {
+    console.log("drag end")
+  });
+  
+  document.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  });
+  
+  document.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const data = event.dataTransfer.getData('text/plain');
+    const x = event.clientX;
+    const y = event.clientY;
+    draggable.style.left = `${x - draggable.offsetWidth / 2}px`;
+    draggable.style.top = `${y - draggable.offsetHeight / 2}px`;
+    console.log("dropped!")
+  });
+</script>
+
+</body>
+</html>
+
+

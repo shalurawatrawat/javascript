@@ -1,0 +1,43 @@
+
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Moving Box</title>
+<style>
+#box {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  position: absolute;
+  left: 0;
+  top: 50px;
+}
+</style>
+</head>
+<body>
+
+<div id="box"></div>
+
+<button id="moveRight">Move Right</button>
+<button id="moveLeft">Move Left</button>
+
+<script>
+const box = document.getElementById('box');
+const moveRightButton = document.getElementById('moveRight');
+const moveLeftButton = document.getElementById('moveLeft');
+let position = 0;
+
+moveRightButton.addEventListener('click', () => {
+  position += 10;
+  box.style.left = position + 'px';
+});
+
+moveLeftButton.addEventListener('click', () => {
+  position -= 10;
+  box.style.left = position + 'px';
+});
+</script>
+
+</body>
+</html>

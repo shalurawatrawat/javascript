@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="myform">
+        <Label>Name</Label>
+        <input id="name" type="text">
+        <br>
+        <br>
+        <Label>Address</Label>
+        <input id="address" type="text">
+        <br>
+        <br>
+        <button onclick="reset()">Reset</button>
+    </form>
+    <script>
+        function reset(){
+            document.getElementById("name").value="";
+            document.getElementById("address").value="";
+        }
+    </script>
+</body>
+</html>

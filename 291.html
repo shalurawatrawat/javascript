@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Windo Real Time Width And Height</h1>
+    <p>width:<span id="width"></span></p>   
+    <p>height:<span id="height"></span></p>  
+
+    <script>
+        function calculator(){
+            let width=window.innerWidth;
+            let height=window.innerHeight;
+            document.getElementById("width").innerHTML=`${width} px`;
+            document.getElementById("height").innerHTML=`${height} px`;
+        }
+        calculator();
+        window.addEventListener("resize",calculator);
+    </script>
+</body>
+</html>

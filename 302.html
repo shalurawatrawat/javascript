@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Tab Navigation</title>
+    <style>
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+        }
+        .tab-button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            cursor: pointer;
+            background-color: #f0f0f0;
+        }
+        .tab-button.active {
+            background-color: #fff;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container"></div>
+    <script>
+        const tabContainer = document.querySelector('.tab-container');
+        const tabsData = [
+            { id: 'tab1', label: 'Tab 1', content: 'Content for Tab 1' },
+            { id: 'tab2', label: 'Tab 2', content: 'Content for Tab 2' },
+            { id: 'tab3', label: 'Tab 3', content: 'Content for Tab 3' }
+        ];
+        function createTabButton(tab) {
+            const button = document.createElement('button');
+            button.classList.add('tab-button');
+            button.id = `button-${tab.id}`;
+            button.textContent = tab.label;
+            button.addEventListener('click', () => showTab(tab.id));
+            return button;
+        }
+        function createTabContent(tab) {
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('tab-content');
+            contentDiv.id = tab.id;
+            contentDiv.textContent = tab.content;
+            return contentDiv;
+        }
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-button, .tab-content').forEach(element => {
+                element.classList.remove('active');
+            });
+            const button = document.getElementById(`button-${tabId}`);
+            const content = document.getElementById(tabId);
+            if (button && content) {
+                button.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+        function initializeTabs() {
+            tabsData.forEach(tab => {
+                tabContainer.appendChild(createTabButton(tab));
+                document.body.appendChild(createTabContent(tab));
+            });
+            if (tabsData.length > 0) {
+                showTab(tabsData[0].id);
+            }
+        }
+        initializeTabs();
+    </script>
+
+</body>
+</html>

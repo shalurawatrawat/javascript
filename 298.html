@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON Data Fetch</title>
+<style>
+  #data-container {
+    margin-top: 20px;
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 30px;
+  }
+  .card{
+    box-shadow:0px 0px 1px 1px black;
+    width: 40%;
+    padding: 20px;
+  }
+  img{
+    width: 80%;
+    height: 40vh;
+    padding: 20px;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+<button id="fetch-button" onclick="fetchData()">Fetch Data</button>
+<div id="data-container">
+   
+</div>
+<script>
+    function fetchData(){
+        let dataContainer=document.getElementById("data-container");
+    fetch("https://api.sampleapis.com/coffee/hot")
+    .then(response => {
+   if (!response.ok) {
+       throw new Error("HTTP error " + response.status);
+   }
+   return response.json();
+})
+.then(data =>{
+    let result="";
+    data.forEach((data)=>{
+        result+=` <div class="card">
+        <p>title:${data.title}</p>
+        <img src="${data.image}" alt="">
+        <p>description:${data.description}</p>
+    </div>`;
+    })
+    dataContainer.innerHTML=result;
+})
+.catch(error => console.error("Error:", error));
+}
+</script>
+
+</body>
+</html>

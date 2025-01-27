@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Filter List</h1>
+    <label for="filter">Select a category:</label>
+    <select id="filter" onchange="filterItems()">
+        <option value="all">All</option>
+        <option value="fruits">Fruits</option>
+        <option value="vegetables">Vegetables</option>
+    </select>
+
+    <ul id="itemList">
+        <li class="fruits">Apple</li>
+        <li class="fruits">Banana</li>
+        <li class="vegetables">Carrot</li>
+        <li class="vegetables">Spinach</li>
+        <li class="fruits">Orange</li>
+        <li class="vegetables">Potato</li>
+    </ul>
+
+    <script>
+        function filterItems() {
+            const filter = document.getElementById("filter").value; 
+            const items = document.querySelectorAll("li");
+
+            items.forEach(item => {
+                if (filter === "all" || item.classList.contains(filter)) {
+                    item.style.display = "list-item"; 
+                } else {
+                    item.style.display = "none"; 
+                }
+            });
+        }
+    </script>
+</body>
+</html>

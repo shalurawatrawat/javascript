@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <style>
+        #progressContainer {
+            width: 80%;
+            height: 20px;
+            border: 1px solid black;
+            margin: 20px auto;
+            background-color: #f3f3f3;
+        }
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background-color: blue;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+        }
+    </style>
+    </head>
+<body>
+     <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
+    <button id="fillButton">Fill Progress</button>
+
+    
+    <script>
+        
+        let progressBar = document.getElementById('progressBar');
+        let fillButton  = document.getElementById('fillButton');
+        
+        fillButton.addEventListener('click',function(event){
+           let count = 0;
+           let time = setInterval(()=>{
+               if(count==100){
+                   clearInterval(time);
+               }else{
+                   count +=10;
+                   progressBar.style.width=count+"%";
+               }
+           },1000);
+        
+        });
+        
+    </script>
+</body>
+</html>
+
+Pappu Singh, Now
+<html>
+<head>
+     <title>Simple Image Slider</title>
+     <style>
+         img{
+            height: 100px;
+            width: 50px;
+         }
+     </style>
+</head>
+<body>
+
+<h2>Image Slider</h2>
+
+<div style="text-align: center;">
+    <img id="sliderImage" src="https://www.shutterstock.com/image-photo/hand-nurturing-watering-young-baby-260nw-1251392806.jpg" style="width: 100%; max-width: 600px;" alt="Image Slider">
+</div>
+
+<div style="text-align: center; margin-top: 10px;">
+    <button onclick="prevImage()">Previous</button>
+    <button onclick="nextImage()">Next</button>
+</div>
+
+<script>
+    var images = [
+        "https://t3.ftcdn.net/jpg/10/35/23/00/360_F_1035230054_0fsDihV6hsd5tBWhxiY35Q5ZEwDRUhqC.jpg",
+        "https://www.shutterstock.com/image-photo/hand-nurturing-watering-young-baby-260nw-1251392806.jpg",
+        "https://t3.ftcdn.net/jpg/10/35/23/00/360_F_1035230054_0fsDihV6hsd5tBWhxiY35Q5ZEwDRUhqC.jpg"
+    ];
+
+    var currentIndex = 0;
+
+    function showImage() {
+        document.getElementById("sliderImage").src = images[currentIndex];
+    }
+
+    function nextImage() {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage();
+    }
+
+    function prevImage() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage();
+    }
+</script>
+
+</body>
+</html>

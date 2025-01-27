@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .addbtn{
+            background-color: rgb(13, 219, 13);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .deletebtn{
+            background-color:red;
+            border-radius: 10px;
+            cursor: pointer;
+            gap:50px;
+        }
+        span{
+            margin-left: 140px;
+        }
+    </style>
+</head>
+<body>
+    <input placeholder="Enter Itams" type="text">
+    <button class="addbtn" onclick="Additams()">Add</button>
+    <div class="datacontainer">
+        <ul>
+
+        </ul>
+    </div>
+    <script>
+        function Additams(){
+            let itam=document.querySelector("input").value;
+            let ul=document.querySelector("ul");
+
+            let Itams=`<li>${itam}<span><button class="deletebtn" onclick="deleteItam(this)">Delete</button></span></li>`;
+            ul.innerHTML+=Itams;
+            clear();
+        }
+
+       function deleteItam(btn){
+            let li=btn.parentElement.parentElement;
+            li.remove();
+       }
+
+       function clear(){
+            document.querySelector("input").value="";
+        }
+    </script>
+</body>
+</html>
