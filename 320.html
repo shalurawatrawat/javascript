@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Preferences Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .form-container {
+      max-width: 400px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Product Preferences</h2>
+    <form id="preferencesForm">
+      <label for="category">Favorite Category:</label>
+      <select id="category" name="category">
+        <option value="electronics">Electronics</option>
+        <option value="fashion">Fashion</option>
+        <option value="home">Home Appliances</option>
+      </select>
+      <label for="color">Preferred Color:</label>
+      <input type="text" id="color" name="color" placeholder="e.g., Red">
+      <label for="priceRange">Price Range:</label>
+      <input type="text" id="priceRange" name="priceRange" placeholder="e.g., $50-$100">
+      <button type="submit">Save Preferences</button>
+    </form>
+  </div>
+  <script>
+    function getCookie(name) {
+      let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return decodeURIComponent(match[2]);
+      return null;
+    }
+    function setCookie(name, value, days) {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/`;
+    }
+    function loadPreferences() {
+      const category = getCookie("category");
+      const color = getCookie("color");
+      const priceRange = getCookie("priceRange");
+      if (category) document.getElementById("category").value = category;
+      if (color) document.getElementById("color").value = color;
+      if (priceRange) document.getElementById("priceRange").value = priceRange;
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      loadPreferences();
+      document.getElementById("preferencesForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const category = document.getElementById("category").value;
+        const color = document.getElementById("color").value;
+        const priceRange = document.getElementById("priceRange").value;
+        setCookie("category", category, 365);
+        setCookie("color", color, 365);
+        setCookie("priceRange", priceRange, 365);
+        alert("Preferences saved!");
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        #search-container {
+            margin-top: 20px;
+        }
+        #search-results {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .movie-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+        }
+        .movie-card img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search</h1>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search for a movie...">
+        <button id="search-button">Search</button>
+    </div>
+    <div id="search-results"></div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const searchResults = document.getElementById('search-results');
+
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchInput.value;
+            if (searchTerm) {
+                searchMovies(searchTerm);
+            }
+        });
+
+        async function searchMovies(searchTerm) {
+            const apiKey = 'YOUR_API_KEY'; // Replace with your OMDB API key
+            const url = `http://www.omdbapi.com/?apikey=${apiKey}&s=${searchTerm}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.Search) {
+                    displayMovies(data.Search);
+                } else {
+                    searchResults.innerHTML = '<p>No movies found.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                searchResults.innerHTML = '<p>An error occurred.</p>';
+            }
+        }
+
+        function displayMovies(movies) {
+            searchResults.innerHTML = '';
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+                movieCard.innerHTML = `
+                    <img src="${movie.Poster}" alt="${movie.Title}">
+                    <h3>${movie.Title}</h3>
+                    <p>${movie.Year}</p>
+                `;
+                searchResults.appendChild(movieCard);
+            });
+        }
+    </script>
+</body>
+</html>

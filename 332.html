@@ -1,0 +1,62 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracker</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #bookList {
+            list-style-type: none;
+            padding: 0;
+        }
+        .book-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>My Book Tracker</h1>
+
+    <input type="text" id="bookTitle" placeholder="Enter book title">
+    <button id="addBook">Add Book</button>
+
+    <ul id="bookList">
+    </ul>
+
+    <script>
+        document.getElementById('addBook').addEventListener('click', function() {
+            const title = document.getElementById('bookTitle').value;
+            if (title.trim() !== '') {
+                addBookToList(title);
+                document.getElementById('bookTitle').value = '';
+            }
+        });
+
+        function addBookToList(title) {
+            const bookList = document.getElementById('bookList');
+            const listItem = document.createElement('li');
+            listItem.classList.add('book-item');
+            listItem.textContent = title;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', function() {
+                listItem.remove();
+            });
+
+            listItem.appendChild(deleteButton);
+            bookList.appendChild(listItem);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    button {
+      padding: 5px 10px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button.delete-btn {
+      background-color: #f44336;
+    }
+    input[type="text"] {
+      padding: 5px;
+      margin-right: 10px;
+      width: calc(50% - 20px);
+    }
+    .form-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cookie Manager</h1>
+    <table id="cookieTable">
+      <thead>
+        <tr>
+          <th>Cookie Name</th>
+          <th>Cookie Value</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="form-container">
+      <h2>Add/Edit Cookie</h2>
+      <input type="text" id="cookieName" placeholder="Cookie Name">
+      <input type="text" id="cookieValue" placeholder="Cookie Value">
+      <button id="addCookieBtn">Save Cookie</button>
+    </div>
+  </div>
+
+  <script>
+    function getCookies() {
+      return document.cookie.split("; ").reduce((cookies, cookie) => {
+        const [name, value] = cookie.split("=");
+        cookies[decodeURIComponent(name)] = decodeURIComponent(value || "");
+        return cookies;
+      }, {});
+    }
+
+    function setCookie(name, value, days = 365) {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+      document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/`;
+      renderCookies();
+    }
+
+    function deleteCookie(name) {
+      document.cookie = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+      renderCookies();
+    }
+
+    function renderCookies() {
+      const cookies = getCookies();
+      const tableBody = document.querySelector("#cookieTable tbody");
+      tableBody.innerHTML = "";
+
+      Object.keys(cookies).forEach((name) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${name}</td>
+          <td>${cookies[name]}</td>
+          <td>
+            <button class="edit-btn" data-name="${name}" data-value="${cookies[name]}">Edit</button>
+            <button class="delete-btn" data-name="${name}">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      document.querySelectorAll(".delete-btn").forEach((button) =>
+        button.addEventListener("click", (e) => {
+          deleteCookie(e.target.getAttribute("data-name"));
+        })
+      );
+
+      document.querySelectorAll(".edit-btn").forEach((button) =>
+        button.addEventListener("click", (e) => {
+          document.getElementById("cookieName").value = e.target.getAttribute("data-name");
+          document.getElementById("cookieValue").value = e.target.getAttribute("data-value");
+        })
+      );
+    }
+
+    document.getElementById("addCookieBtn").addEventListener("click", () => {
+      const name = document.getElementById("cookieName").value.trim();
+      const value = document.getElementById("cookieValue").value.trim();
+      if (name && value) {
+        setCookie(name, value);
+        document.getElementById("cookieName").value = "";
+        document.getElementById("cookieValue").value = "";
+      } else {
+        alert("Please enter both cookie name and value!");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", renderCookies);
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .profile-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .profile-info {
+            margin-bottom: 15px;
+        }
+        .profile-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <img id="profileImage" class="profile-image" src="" alt="Profile Picture">
+        <div class="profile-info">
+            <span class="profile-label">Name:</span> <span id="userName"></span>
+        </div>
+        <div class="profile-info">
+            <span class="profile-label">Email:</span> <span id="userEmail"></span>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userEmail').textContent = user.email;
+                if (user.profilePicture) {
+                  document.getElementById('profileImage').src = user.profilePicture;
+                  }
+            }
+        };
+    </script>
+</body>
+</html>

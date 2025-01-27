@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Screen Resolution Checker</title>
+    
+</head>
+<body>
+        <h1>Screen Resolution Checker</h1>
+
+        <p>Width: <span id="width"></span> px</p>
+        <p>Height:<span id="height"></span> px</p>
+       
+    <script>
+       function chakeScreen(){
+        let width=window.innerWidth;
+        let height=window.innerHeight;
+
+        document.getElementById("width").textContent=width;
+        document.getElementById("height").textContent =height;
+
+       }
+       chakeScreen();
+       window.addEventListener('resize', chakeScreen);
+    </script>
+</body>
+</html>

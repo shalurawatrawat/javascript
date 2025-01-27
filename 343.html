@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Session-Based Authentication</title>
+<script>
+  function checkSession() {
+    fetch('/check-session')
+      .then(response => response.json())
+      .then(data => {
+        if (data.authenticated) {
+          document.getElementById('content').style.display = 'block';
+          document.getElementById('login').style.display = 'none';
+        } else {
+          document.getElementById('content').style.display = 'none';
+          document.getElementById('login').style.display = 'block';
+        }
+      });
+  }
+
+  function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          checkSession();
+        } else {
+          alert('Login failed!');
+        }
+      });
+  }
+
+  function logout() {
+    fetch('/logout', { method: 'POST' })
+      .then(() => checkSession());
+  }
+
+  window.onload = checkSession;
+</script>
+</head>
+<body>
+
+<div id="login">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="content" style="display: none;">
+  <h2>Protected Content</h2>
+  <p>You are logged in!</p>
+  <button onclick="logout()">Logout</button>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        #search-bar {
+            margin-bottom: 20px;
+        }
+        .book {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            display: flex;
+        }
+        .book img {
+            margin-right: 10px;
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Search</h1>
+    <div id="search-bar">
+        <input type="text" id="search-input" placeholder="Enter book title">
+        <button id="search-button">Search</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const resultsDiv = document.getElementById('results');
+
+        searchButton.addEventListener('click', searchBooks);
+
+        function searchBooks() {
+            const query = searchInput.value;
+            if (!query) return;
+
+            resultsDiv.innerHTML = 'Loading...';
+
+            fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsDiv.innerHTML = '';
+                    if (data.items) {
+                        data.items.forEach(item => {
+                            const book = createBookElement(item);
+                            resultsDiv.appendChild(book);
+                        });
+                    } else {
+                        resultsDiv.innerHTML = 'No results found.';
+                    }
+                })
+                .catch(error => {
+                    resultsDiv.innerHTML = 'An error occurred.';
+                    console.error('Error:', error);
+                });
+        }
+
+        function createBookElement(bookData) {
+            const bookDiv = document.createElement('div');
+            bookDiv.classList.add('book');
+
+            const image = document.createElement('img');
+            image.src = bookData.volumeInfo.imageLinks?.thumbnail || 'placeholder.png';
+            image.alt = 'Book Cover';
+            bookDiv.appendChild(image);
+
+            const infoDiv = document.createElement('div');
+            const title = document.createElement('h3');
+            title.textContent = bookData.volumeInfo.title;
+            infoDiv.appendChild(title);
+
+            if (bookData.volumeInfo.authors) {
+                const authors = document.createElement('p');
+                authors.textContent = `Authors: ${bookData.volumeInfo.authors.join(', ')}`;
+                infoDiv.appendChild(authors);
+            }
+            
+            bookDiv.appendChild(infoDiv);
+
+            return bookDiv;
+        }
+    </script>
+</body>
+</html>

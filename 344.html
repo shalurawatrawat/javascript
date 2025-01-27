@@ -1,0 +1,35 @@
+html
+<label for="theme-select">Select theme:</label>
+<select id="theme-select">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+</select>
+
+<script>
+  const themeSelect = document.getElementById('theme-select');
+  const body = document.body;
+  
+  const savedTheme = sessionStorage.getItem('theme');
+  if (savedTheme) {
+    body.classList.add(savedTheme);
+    themeSelect.value = savedTheme;
+  }
+  
+  themeSelect.addEventListener('change', () => {
+    const selectedTheme = themeSelect.value;
+    body.classList.remove('light', 'dark');
+    body.classList.add(selectedTheme);
+    sessionStorage.setItem('theme', selectedTheme);
+  });
+</script>
+
+<style>
+  body.light {
+    background-color: white;
+    color: black;
+  }
+  body.dark {
+    background-color: black;
+    color: white;
+  }
+</style>

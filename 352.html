@@ -1,0 +1,86 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Language Translator</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+textarea {
+  width: 300px;
+  height: 100px;
+  margin-bottom: 10px;
+}
+#translatedText {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 100px;
+}
+</style>
+</head>
+<body>
+
+<h1>Language Translator</h1>
+
+<textarea id="inputText" placeholder="Enter text to translate"></textarea><br>
+
+<select id="targetLanguage">
+  <option value="es">Spanish</option>
+  <option value="fr">French</option>
+  <option value="de">German</option>
+  <option value="ja">Japanese</option>
+  <option value="zh-CN">Chinese (Simplified)</option>
+</select>
+
+<button onclick="translateText()">Translate</button>
+
+<h2>Translated Text:</h2>
+<div id="translatedText"></div>
+
+<script>
+function translateText() {
+  const inputText = document.getElementById('inputText').value;
+  const targetLanguage = document.getElementById('targetLanguage').value;
+  const translatedTextDiv = document.getElementById('translatedText');
+
+  if (!inputText) {
+    translatedTextDiv.textContent = "Please enter text to translate.";
+    return;
+  }
+
+  const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+  const apiUrl = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      q: inputText,
+      target: targetLanguage,
+      format: 'text'
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.data && data.data.translations && data.data.translations.length > 0) {
+        translatedTextDiv.textContent = data.data.translations[0].translatedText;
+    }
+    else if (data.error){
+        translatedTextDiv.textContent = `Error: ${data.error.message}`;
+    }
+     else{
+        translatedTextDiv.textContent = "Translation failed";
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    translatedTextDiv.textContent = "An error occurred during translation.";
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Session Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Game Session Tracker</h1>
+  <div id="status"></div>
+  <button onclick="startGame()">Start Game</button>
+  <button onclick="addScore(10)">Add 10 Points</button>
+  <button onclick="endGame()">End Game</button>
+
+  <script>
+    function startGame() {
+      const playerName = prompt("Enter your name:");
+      if (!playerName) {
+        alert("Game start canceled. Please enter a name.");
+        return;
+      }
+
+      // Initialize session data
+      sessionStorage.setItem("playerName", playerName);
+      sessionStorage.setItem("score", "0");
+      sessionStorage.setItem("startTime", Date.now());
+
+      updateStatus();
+    }
+
+    function addScore(points) {
+      if (!sessionStorage.getItem("playerName")) {
+        alert("Start the game first!");
+        return;
+      }
+
+      let currentScore = parseInt(sessionStorage.getItem("score"), 10);
+      currentScore += points;
+      sessionStorage.setItem("score", currentScore.toString());
+
+      updateStatus();
+    }
+
+    function endGame() {
+      if (!sessionStorage.getItem("playerName")) {
+        alert("No game in progress!");
+        return;
+      }
+
+      const playerName = sessionStorage.getItem("playerName");
+      const score = sessionStorage.getItem("score");
+      const startTime = parseInt(sessionStorage.getItem("startTime"), 10);
+      const duration = Math.round((Date.now() - startTime) / 1000); // Duration in seconds
+
+      alert(
+        `Game Over!\nPlayer: ${playerName}\nScore: ${score}\nTime Played: ${duration} seconds`
+      );
+
+      // Clear session data
+      sessionStorage.clear();
+      updateStatus();
+    }
+
+    function updateStatus() {
+      const statusDiv = document.getElementById("status");
+      const playerName = sessionStorage.getItem("playerName");
+      const score = sessionStorage.getItem("score");
+      const startTime = sessionStorage.getItem("startTime");
+
+      if (playerName) {
+        const timeElapsed = Math.round((Date.now() - parseInt(startTime, 10)) / 1000);
+        statusDiv.innerHTML = `
+          <p><strong>Player:</strong> ${playerName}</p>
+          <p><strong>Score:</strong> ${score}</p>
+          <p><strong>Time Elapsed:</strong> ${timeElapsed} seconds</p>
+        `;
+      } else {
+        statusDiv.innerHTML = "<p>No active game session.</p>";
+      }
+    }
+
+    // Update status every second
+    setInterval(updateStatus, 1000);
+  </script>
+</body>
+</html>

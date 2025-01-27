@@ -1,0 +1,95 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #weather-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #weather-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="weather-container">
+        <input type="text" id="city-input" placeholder="Enter city name">
+        <button id="search-button">Search</button>
+        <div id="weather-info"></div>
+    </div>
+
+    <script>
+        const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your API key
+        const cityInput = document.getElementById('city-input');
+        const searchButton = document.getElementById('search-button');
+        const weatherInfo = document.getElementById('weather-info');
+
+        searchButton.addEventListener('click', () => {
+            const city = cityInput.value;
+            if (city) {
+                fetchWeather(city);
+            }
+        });
+
+        async function fetchWeather(city) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayWeather(data);
+                } else {
+                    weatherInfo.textContent = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                weatherInfo.textContent = `Error: Could not fetch weather data`;
+            }
+        }
+
+        function displayWeather(data) {
+            const { name, main, weather } = data;
+            const temperature = main.temp;
+            const description = weather[0].description;
+            const icon = weather[0].icon;
+
+            weatherInfo.innerHTML = `
+                <h2>${name}</h2>
+                <img src="https://openweathermap.org/img/w/${icon}.png" alt="Weather Icon">
+                <p>Temperature: ${temperature}°C</p>
+                <p>Description: ${description}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

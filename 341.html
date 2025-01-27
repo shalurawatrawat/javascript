@@ -1,0 +1,106 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Comparison</title>
+    <style>
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .compare-list {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Comparison Tool</h1>
+
+    <div id="product-list">
+        </div>
+
+    <h2>Comparison List</h2>
+    <div id="comparison-list" class="compare-list">
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: "Product A", price: 100, description: "Description A" },
+            { id: 2, name: "Product B", price: 150, description: "Description B" },
+            { id: 3, name: "Product C", price: 200, description: "Description C" },
+            { id: 4, name: "Product D", price: 120, description: "Description D" },
+        ];
+
+        function displayProducts() {
+            const productList = document.getElementById("product-list");
+            products.forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.classList.add("product");
+                productDiv.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>Price: $${product.price}</p>
+                    <p>${product.description}</p>
+                    <button onclick="addToComparison(${product.id})">Add to Comparison</button>
+                `;
+                productList.appendChild(productDiv);
+            });
+        }
+
+        function addToComparison(productId) {
+            let comparisonList = sessionStorage.getItem("comparisonList");
+            comparisonList = comparisonList ? JSON.parse(comparisonList) : [];
+
+            const product = products.find(p => p.id === productId);
+            if (product && !comparisonList.find(p => p.id === productId)) {
+                comparisonList.push(product);
+                sessionStorage.setItem("comparisonList", JSON.stringify(comparisonList));
+                updateComparisonList();
+            }
+        }
+
+        function updateComparisonList() {
+            const comparisonListDiv = document.getElementById("comparison-list");
+            comparisonListDiv.innerHTML = ""; 
+
+            let comparisonList = sessionStorage.getItem("comparisonList");
+            comparisonList = comparisonList ? JSON.parse(comparisonList) : [];
+
+            if (comparisonList.length === 0) {
+                comparisonListDiv.textContent = "No products added yet.";
+            } else {
+                comparisonList.forEach(product => {
+                    const productDiv = document.createElement("div");
+                    productDiv.classList.add("product");
+                    productDiv.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p>Price: $${product.price}</p>
+                        <p>${product.description}</p>
+                        <button onclick="removeFromComparison(${product.id})">Remove</button>
+                    `;
+                    comparisonListDiv.appendChild(productDiv);
+                });
+            }
+        }
+
+        function removeFromComparison(productId) {
+            let comparisonList = sessionStorage.getItem("comparisonList");
+            comparisonList = comparisonList ? JSON.parse(comparisonList) : [];
+            comparisonList = comparisonList.filter(p => p.id !== productId);
+            sessionStorage.setItem("comparisonList", JSON.stringify(comparisonList));
+            updateComparisonList();
+        }
+
+        displayProducts();
+        updateComparisonList();
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Navigation Tracker</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  #navigation-tracker {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  #navigation-tracker a {
+    margin-right: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div id="navigation-tracker">
+  Navigation History:
+  <span id="history-links"></span>
+</div>
+
+<script>
+  function updateNavigationHistory() {
+    let history = sessionStorage.getItem('navigationHistory');
+    if (!history) {
+      history = [];
+    } else {
+      history = JSON.parse(history);
+    }
+
+    const currentPage = window.location.href;
+    if (history.length === 0 || history[history.length - 1] !== currentPage) {
+        history.push(currentPage);
+    }
+    sessionStorage.setItem('navigationHistory', JSON.stringify(history));
+
+    const historyLinks = document.getElementById('history-links');
+    historyLinks.innerHTML = '';
+
+    history.forEach((url, index) => {
+      const link = document.createElement('a');
+      link.href = url;
+      link.textContent = `Page ${index + 1}`;
+      historyLinks.appendChild(link);
+    });
+  }
+
+  updateNavigationHistory();
+</script>
+
+</body>
+</html>

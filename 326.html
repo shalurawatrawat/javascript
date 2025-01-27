@@ -1,0 +1,95 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Note-Taking App</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  #notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+  }
+  .note {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+  }
+</style>
+</head>
+<body>
+  <h1>Note-Taking App</h1>
+  <button id="addNote">Add Note</button>
+  <div id="notes"></div>
+
+<script>
+  const notesContainer = document.getElementById('notes');
+  const addNoteButton = document.getElementById('addNote');
+
+  function createNoteElement(id, content = '') {
+    const element = document.createElement('div');
+    element.classList.add('note');
+    element.innerHTML = `
+      <textarea>${content}</textarea>
+      <button class="delete">Delete</button>
+    `;
+    
+    const deleteButton = element.querySelector('.delete');
+    deleteButton.addEventListener('click', () => {
+      deleteNote(id, element);
+    });
+
+    const textArea = element.querySelector('textarea');
+    textArea.addEventListener('input', () => {
+      updateNote(id, textArea.value);
+    });
+    return element;
+  }
+
+  function loadNotes() {
+    notesContainer.innerHTML = '';
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    notes.forEach(note => {
+      const element = createNoteElement(note.id, note.content);
+      notesContainer.appendChild(element);
+    });
+  }
+
+  function addNote() {
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const note = {
+      id: Date.now(),
+      content: ''
+    };
+    notes.push(note);
+    localStorage.setItem('notes', JSON.stringify(notes));
+    const element = createNoteElement(note.id);
+    notesContainer.appendChild(element);
+  }
+
+  function updateNote(id, content) {
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const noteToUpdate = notes.find(note => note.id === id);
+    if (noteToUpdate) {
+      noteToUpdate.content = content;
+      localStorage.setItem('notes', JSON.stringify(notes));
+    }
+  }
+
+  function deleteNote(id, element) {
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const updatedNotes = notes.filter(note => note.id !== id);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
+    notesContainer.removeChild(element);
+  }
+
+  addNoteButton.addEventListener('click', addNote);
+  loadNotes();
+</script>
+</body>
+</html>

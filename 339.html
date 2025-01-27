@@ -1,0 +1,65 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chat App</title>
+<style>
+  #chatbox {
+    width: 300px;
+    height: 300px;
+    border: 1px solid black;
+    overflow-y: scroll;
+  }
+  .message {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+  }
+</style>
+</head>
+<body>
+
+<h1>Chat App</h1>
+
+<div id="chatbox"></div>
+<input type="text" id="messageInput" placeholder="Enter your message">
+<button onclick="sendMessage()">Send</button>
+
+<script>
+  function loadMessages() {
+    let messages = sessionStorage.getItem('chatMessages');
+    if (messages) {
+      messages = JSON.parse(messages);
+      const chatbox = document.getElementById('chatbox');
+      chatbox.innerHTML = '';
+      messages.forEach(msg => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        messageElement.textContent = msg;
+        chatbox.appendChild(messageElement);
+      });
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+  }
+
+  function saveMessage(message) {
+    let messages = sessionStorage.getItem('chatMessages');
+    messages = messages ? JSON.parse(messages) : [];
+    messages.push(message);
+    sessionStorage.setItem('chatMessages', JSON.stringify(messages));
+  }
+
+  function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    if (message) {
+      saveMessage(message);
+      messageInput.value = '';
+      loadMessages();
+    }
+  }
+
+  loadMessages();
+</script>
+
+</body>
+</html>

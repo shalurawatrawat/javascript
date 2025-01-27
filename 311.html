@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Spent on Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .timer {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Time Spent on This Page</h1>
+    <div class="timer">
+        You have spent <span id="timeSpent">0</span> seconds on this page.
+    </div>
+
+    <script>
+        let startTime;
+        window.onload = function () {
+            startTime = Date.now();
+        };
+        window.onbeforeunload = function () {
+            const endTime = Date.now();
+            const timeSpentInSeconds = Math.round((endTime - startTime) / 1000);
+            console.log(`You spent ${timeSpentInSeconds} seconds on this page.`);
+        };
+        setInterval(() => {
+            const currentTime = Date.now();
+            const timeSpentInSeconds = Math.round((currentTime - startTime) / 1000);
+            document.getElementById('timeSpent').textContent = timeSpentInSeconds;
+        }, 1000);
+    </script>
+</body>
+</html>

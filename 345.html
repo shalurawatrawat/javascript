@@ -1,0 +1,77 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <input type="number" id="amount" value="1">
+        <select id="from"></select>
+        <select id="to"></select>
+        <button onclick="convert()">Convert</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        const fromSelect = document.getElementById('from');
+        const toSelect = document.getElementById('to');
+        const amountInput = document.getElementById('amount');
+        const resultDiv = document.getElementById('result');
+
+        const apiKey = 'YOUR_API_KEY'; // Replace with your API key
+        const apiUrl = `https://api.exchangerate-api.com/v4/latest/USD`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const currencies = Object.keys(data.rates);
+                currencies.forEach(currency => {
+                    const option1 = document.createElement('option');
+                    option1.value = currency;
+                    option1.text = currency;
+                    fromSelect.add(option1);
+
+                    const option2 = document.createElement('option');
+                    option2.value = currency;
+                    option2.text = currency;
+                    toSelect.add(option2);
+                });
+                fromSelect.value = 'USD';
+                toSelect.value = 'EUR';
+            });
+
+        function convert() {
+            const amount = amountInput.value;
+            const fromCurrency = fromSelect.value;
+            const toCurrency = toSelect.value;
+            
+             fetch(apiUrl.replace('USD',fromCurrency))
+                .then(response => response.json())
+                .then(data => {
+                    const rate = data.rates[toCurrency];
+                    const convertedAmount = (amount * rate).toFixed(2);
+                    resultDiv.textContent = `${amount} ${fromCurrency} = ${convertedAmount} ${toCurrency}`;
+                });
+        }
+    </script>
+</body>
+</html>

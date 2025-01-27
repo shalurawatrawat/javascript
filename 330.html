@@ -1,0 +1,48 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Multi-Tab Sync</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1>Multi-Tab Sync</h1>
+
+<input type="text" id="myInput" placeholder="Enter text here">
+
+<div id="display"></div>
+
+<script>
+  const input = document.getElementById('myInput');
+  const display = document.getElementById('display');
+  const storageKey = 'sharedData';
+
+  function updateDisplay(data) {
+    display.textContent = data;
+  }
+
+  input.addEventListener('input', () => {
+    localStorage.setItem(storageKey, input.value);
+    updateDisplay(input.value);
+  });
+
+  window.addEventListener('storage', (event) => {
+    if (event.key === storageKey) {
+      input.value = event.newValue;
+      updateDisplay(event.newValue);
+    }
+  });
+  
+  const initialValue = localStorage.getItem(storageKey) || '';
+  input.value = initialValue;
+  updateDisplay(initialValue);
+
+</script>
+
+</body>
+</html>

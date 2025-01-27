@@ -1,0 +1,64 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sentiment Analysis Tool</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+textarea {
+  width: 500px;
+  height: 200px;
+  margin-bottom: 10px;
+}
+#result {
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<h1>Sentiment Analysis</h1>
+
+<textarea id="textInput" placeholder="Enter text here..."></textarea>
+<br>
+<button onclick="analyzeSentiment()">Analyze</button>
+
+<div id="result"></div>
+
+<script>
+async function analyzeSentiment() {
+  const text = document.getElementById("textInput").value;
+  const resultDiv = document.getElementById("result");
+  resultDiv.textContent = "Analyzing...";
+
+  const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
+  const apiUrl = "https://api.deepai.org/api/sentiment-analysis";
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'api-key': apiKey,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `text=${encodeURIComponent(text)}`
+    });
+
+    const data = await response.json();
+    if (data.output) {
+      resultDiv.textContent = `Sentiment: ${data.output}`;
+    } else if (data.error) {
+        resultDiv.textContent = `Error: ${data.error}`;
+    } else {
+      resultDiv.textContent = "Unable to analyze sentiment.";
+    }
+  } catch (error) {
+    resultDiv.textContent = `Error: ${error.message}`;
+  }
+}
+</script>
+
+</body>
+</html>

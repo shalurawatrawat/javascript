@@ -1,0 +1,97 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub User Profile</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #profile-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        #profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub User Profile</h1>
+    <input type="text" id="username" placeholder="Enter GitHub username">
+    <button id="fetch-button">Fetch Profile</button>
+    <div id="profile-container">
+        <img id="profile-image" src="" alt="Profile Image">
+        <h2 id="profile-name"></h2>
+        <p id="profile-bio"></p>
+        <p id="profile-location"></p>
+        <a id="profile-link" href="" target="_blank">View Profile</a>
+    </div>
+
+    <script>
+        const usernameInput = document.getElementById('username');
+        const fetchButton = document.getElementById('fetch-button');
+        const profileContainer = document.getElementById('profile-container');
+        const profileImage = document.getElementById('profile-image');
+        const profileName = document.getElementById('profile-name');
+        const profileBio = document.getElementById('profile-bio');
+        const profileLocation = document.getElementById('profile-location');
+        const profileLink = document.getElementById('profile-link');
+
+        fetchButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (username) {
+                fetchUserProfile(username);
+            }
+        });
+
+        async function fetchUserProfile(username) {
+            const url = `https://api.github.com/users/${username}`;
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const user = await response.json();
+                    displayUserProfile(user);
+                } else {
+                    throw new Error('User not found');
+                }
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+                clearProfile();
+                profileName.textContent = 'User not found';
+            }
+        }
+
+        function displayUserProfile(user) {
+            profileImage.src = user.avatar_url;
+            profileName.textContent = user.name || user.login;
+            profileBio.textContent = user.bio || 'No bio available';
+            profileLocation.textContent = user.location || 'Location not available';
+            profileLink.href = user.html_url;
+            profileLink.textContent = 'View Profile';
+            profileContainer.style.display = 'flex';
+        }
+
+        function clearProfile() {
+            profileImage.src = '';
+            profileName.textContent = '';
+            profileBio.textContent = '';
+            profileLocation.textContent = '';
+            profileLink.href = '';
+            profileLink.textContent = '';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+html
+<script>
+  let timerInterval;
+  let timeLeft = sessionStorage.getItem('timeLeft') ? parseInt(sessionStorage.getItem('timeLeft')) : 60;
+
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      sessionStorage.setItem('timeLeft', timeLeft);
+      document.getElementById('timer').textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        alert("Time's up!");
+      }
+    }, 1000);
+  }
+
+  window.addEventListener('beforeunload', () => {
+    clearInterval(timerInterval);
+  });
+  window.addEventListener('load', () => {
+    startTimer();
+  });
+</script>
+<div id="timer">60</div>

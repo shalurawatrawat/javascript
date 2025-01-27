@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy Pop-Up</title>
+  <style>
+    /* Styles for the pop-up */
+    #cookiePopup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      max-width: 300px;
+      font-family: Arial, sans-serif;
+      display: none; /* Hidden initially */
+    }
+
+    #cookiePopup.active {
+      display: block;
+    }
+
+    #cookiePopup h4 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    #cookiePopup p {
+      margin: 0 0 15px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    #cookiePopup .button-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #cookiePopup button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #cookiePopup .accept-btn {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    #cookiePopup .decline-btn {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    #cookiePopup button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div id="cookiePopup" class="active">
+    <h4>Cookie Policy</h4>
+    <p>We use cookies to improve your experience. By accepting, you agree to our cookie policy.</p>
+    <div class="button-container">
+      <button class="accept-btn">Accept</button>
+      <button class="decline-btn">Decline</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const cookiePopup = document.getElementById("cookiePopup");
+      const acceptBtn = cookiePopup.querySelector(".accept-btn");
+      const declineBtn = cookiePopup.querySelector(".decline-btn");
+      if (document.cookie.includes("cookieConsent=accepted")) {
+        cookiePopup.classList.remove("active");
+      }
+      acceptBtn.addEventListener("click", () => {
+        document.cookie = "cookieConsent=accepted; path=/; max-age=31536000"; // 1 year
+        cookiePopup.classList.remove("active");
+        alert("You accepted the cookie policy.");
+      });
+      
+      declineBtn.addEventListener("click", () => {
+        document.cookie = "cookieConsent=declined; path=/; max-age=31536000"; // 1 year
+        cookiePopup.classList.remove("active");
+        alert("You declined the cookie policy.");
+      });
+    });
+  </script>
+</body>
+</html>

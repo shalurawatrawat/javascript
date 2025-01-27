@@ -1,0 +1,92 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <style>
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .wishlist-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Product Catalog</h1>
+    <div id="product-list">
+        <!-- Product items will be added here -->
+    </div>
+
+    <h1>My Wishlist</h1>
+    <div id="wishlist-items">
+        <!-- Wishlist items will be added here -->
+    </div>
+
+    <script>
+        const productList = document.getElementById('product-list');
+        const wishlistItems = document.getElementById('wishlist-items');
+        let products = [
+            { id: 1, name: 'Product 1', price: 10 },
+            { id: 2, name: 'Product 2', price: 20 },
+            { id: 3, name: 'Product 3', price: 30 }
+        ];
+
+        function displayProducts() {
+            products.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product');
+                productDiv.innerHTML = `
+                    <h2>${product.name}</h2>
+                    <p>Price: $${product.price}</p>
+                    <button onclick="addToWishlist(${product.id})">Add to Wishlist</button>
+                `;
+                productList.appendChild(productDiv);
+            });
+        }
+        
+        function addToWishlist(productId) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const product = products.find(p => p.id === productId);
+            if (product && !wishlist.find(item => item.id === productId)) {
+                wishlist.push(product);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                displayWishlist();
+            }
+        }
+
+        function removeFromWishlist(productId) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist = wishlist.filter(item => item.id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            displayWishlist();
+        }
+
+        function displayWishlist() {
+            wishlistItems.innerHTML = '';
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('wishlist-item');
+                itemDiv.innerHTML = `
+                    <h2>${item.name}</h2>
+                    <p>Price: $${item.price}</p>
+                    <button onclick="removeFromWishlist(${item.id})">Remove</button>
+                `;
+                wishlistItems.appendChild(itemDiv);
+            });
+        }
+
+        displayProducts();
+        displayWishlist();
+    </script>
+
+</body>
+</html>

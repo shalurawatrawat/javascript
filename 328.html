@@ -1,0 +1,11 @@
+
+<input type="color" id="colorPicker" value="#ff0000">
+<script>
+  const colorPicker = document.getElementById('colorPicker');
+  colorPicker.addEventListener('input', () => {
+    localStorage.setItem('selectedColor', colorPicker.value);
+  });
+  if (localStorage.getItem('selectedColor')) {
+    colorPicker.value = localStorage.getItem('selectedColor');
+  }
+</script>
