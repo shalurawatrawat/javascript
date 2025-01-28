@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation Engine</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #preferences, #recommendations {
+            margin-bottom: 20px;
+        }
+        .movie {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Recommendation Engine</h1>
+
+    <div id="preferences">
+        <h2>Your Preferences</h2>
+        <label for="genre">Favorite Genre:</label>
+        <select id="genre">
+            <option value="">Select</option>
+            <option value="action">Action</option>
+            <option value="comedy">Comedy</option>
+            <option value="drama">Drama</option>
+            <option value="scifi">Sci-Fi</option>
+            <option value="horror">Horror</option>
+        </select>
+        <br>
+
+        <label for="rating">Minimum Rating (1-5):</label>
+        <input type="number" id="rating" min="1" max="5" value="3">
+        <br>
+
+        <button id="getRecommendations">Get Recommendations</button>
+    </div>
+
+    <div id="recommendations">
+        <h2>Movie Recommendations</h2>
+        <div id="movieList"></div>
+    </div>
+
+    <script>
+        const movies = [
+            { title: "Action Movie 1", genre: "action", rating: 4.5 },
+            { title: "Comedy Movie 1", genre: "comedy", rating: 3.8 },
+            { title: "Drama Movie 1", genre: "drama", rating: 4.2 },
+            { title: "Sci-Fi Movie 1", genre: "scifi", rating: 4.7 },
+            { title: "Horror Movie 1", genre: "horror", rating: 3.5 },
+            { title: "Action Movie 2", genre: "action", rating: 3.9 },
+            { title: "Comedy Movie 2", genre: "comedy", rating: 4.1 },
+            { title: "Drama Movie 2", genre: "drama", rating: 4.8 },
+            { title: "Sci-Fi Movie 2", genre: "scifi", rating: 4.3 },
+            { title: "Horror Movie 2", genre: "horror", rating: 2.9 },
+            { title: "Action Movie 3", genre: "action", rating: 4.6 },
+            { title: "Comedy Movie 3", genre: "comedy", rating: 3.6 },
+            { title: "Drama Movie 3", genre: "drama", rating: 4.9 },
+            { title: "Sci-Fi Movie 3", genre: "scifi", rating: 3.7 },
+            { title: "Horror Movie 3", genre: "horror", rating: 4.0 },
+        ];
+
+        document.getElementById('getRecommendations').addEventListener('click', () => {
+            const selectedGenre = document.getElementById('genre').value;
+            const minRating = parseFloat(document.getElementById('rating').value);
+            const movieList = document.getElementById('movieList');
+            movieList.innerHTML = '';
+
+            const filteredMovies = movies.filter(movie => {
+                return (selectedGenre === '' || movie.genre === selectedGenre) && movie.rating >= minRating;
+            });
+
+            if (filteredMovies.length === 0) {
+                movieList.innerHTML = '<p>No movies found matching your preferences.</p>';
+                return;
+            }
+
+            filteredMovies.forEach(movie => {
+                const movieDiv = document.createElement('div');
+                movieDiv.classList.add('movie');
+                movieDiv.innerHTML = `<h3>${movie.title}</h3><p>Genre: ${movie.genre}</p><p>Rating: ${movie.rating}</p>`;
+                movieList.appendChild(movieDiv);
+            });
+        });
+    </script>
+</body>
+</html>

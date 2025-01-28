@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #tracker {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], button {
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        #results {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .stat-display {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="tracker">
+        <h1>Fitness Tracker</h1>
+        <label for="steps">Steps:</label>
+        <input type="number" id="steps" placeholder="Enter steps">
+        <label for="calories">Calories Burned:</label>
+        <input type="number" id="calories" placeholder="Enter calories burned">
+        <button onclick="updateStats()">Update Stats</button>
+
+        <div id="results">
+            <h2>Your Stats</h2>
+            <div class="stat-display">
+                <span id="total-steps">Total Steps: 0</span>
+            </div>
+            <div class="stat-display">
+                <span id="total-calories">Total Calories Burned: 0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let totalSteps = 0;
+        let totalCalories = 0;
+
+        function updateStats() {
+            const steps = parseInt(document.getElementById('steps').value) || 0;
+            const calories = parseInt(document.getElementById('calories').value) || 0;
+
+            totalSteps += steps;
+            totalCalories += calories;
+
+            document.getElementById('total-steps').textContent = `Total Steps: ${totalSteps}`;
+            document.getElementById('total-calories').textContent = `Total Calories Burned: ${totalCalories}`;
+
+            // Store data in local storage
+            localStorage.setItem('totalSteps', totalSteps);
+            localStorage.setItem('totalCalories', totalCalories);
+        }
+
+        // Load data from local storage on page load
+        window.onload = function() {
+            totalSteps = parseInt(localStorage.getItem('totalSteps')) || 0;
+            totalCalories = parseInt(localStorage.getItem('totalCalories')) || 0;
+            document.getElementById('total-steps').textContent = `Total Steps: ${totalSteps}`;
+            document.getElementById('total-calories').textContent = `Total Calories Burned: ${totalCalories}`;
+        };
+
+        // Example to fetch from an API (replace with your API details)
+        // In this example there is no actual api just a demonstration of how it would look
+        function fetchActivityData() {
+            fetch('/api/activity') 
+                .then(response => response.json())
+                .then(data => {
+                    // Update stats with API data, adjust as needed
+                    if (data.steps) {
+                        totalSteps += data.steps;
+                        document.getElementById('total-steps').textContent = `Total Steps: ${totalSteps}`;
+                        localStorage.setItem('totalSteps', totalSteps);
+                    }
+                    if (data.calories) {
+                        totalCalories += data.calories;
+                        document.getElementById('total-calories').textContent = `Total Calories Burned: ${totalCalories}`;
+                        localStorage.setItem('totalCalories', totalCalories);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+        
+    </script>
+</body>
+</html>

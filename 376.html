@@ -1,0 +1,25 @@
+
+<script>
+  function isOnline() {
+    return navigator.onLine;
+  }
+
+  function saveToLocalStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  function loadFromLocalStorage(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  }
+
+  window.addEventListener('offline', () => {
+    console.log('App is offline');
+  });
+
+  window.addEventListener('online', () => {
+    console.log('App is online');
+  });
+
+  
+</script>

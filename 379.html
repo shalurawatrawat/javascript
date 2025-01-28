@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Slideshow</title>
+    <style>
+        #slideshow-container {
+            width: 500px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transition: transform 0.5s ease-in-out;
+            display: none;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slide.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="slideshow-container">
+    </div>
+
+    <script>
+        const slideshowContainer = document.getElementById('slideshow-container');
+        let currentSlideIndex = 0;
+        let slides = [];
+
+        async function fetchImages() {
+            try {
+                const response = await fetch('https://api.example.com/images'); // Replace with your API endpoint
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching images:', error);
+                return [];
+            }
+        }
+
+        function createSlide(imageUrl) {
+            const slide = document.createElement('div');
+            slide.classList.add('slide');
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            slide.appendChild(img);
+            return slide;
+        }
+
+        function updateSlideshow() {
+            slideshowContainer.innerHTML = '';
+            slides.forEach((slide, index) => {
+                slideshowContainer.appendChild(slide);
+                if (index === currentSlideIndex) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            slides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            slides[currentSlideIndex].classList.add('active');
+        }
+
+        async function initializeSlideshow() {
+            const imageList = await fetchImages();
+            slides = imageList.map(imageUrl => createSlide(imageUrl));
+            updateSlideshow();
+            setInterval(nextSlide, 3000); // Change slide every 3 seconds
+        }
+
+        initializeSlideshow();
+    </script>
+</body>
+</html>

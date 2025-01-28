@@ -1,0 +1,85 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>API Data Table</title>
+<style>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+</style>
+</head>
+<body>
+
+<h2>Data from API</h2>
+<table id="dataTable">
+  <thead>
+    <tr></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+fetch(apiUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const table = document.getElementById('dataTable');
+    const thead = table.querySelector('thead tr');
+    const tbody = table.querySelector('tbody');
+
+    if (data.length > 0) {
+      const headers = Object.keys(data[0]);
+      headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        thead.appendChild(th);
+      });
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        headers.forEach(header => {
+          const cell = document.createElement('td');
+          cell.textContent = item[header];
+          row.appendChild(cell);
+        });
+        tbody.appendChild(row);
+      });
+    } else {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+        cell.textContent = "No data found."
+        cell.setAttribute("colspan", 100);
+        cell.style.textAlign = "center";
+        row.appendChild(cell);
+      tbody.appendChild(row);
+    }
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+    const table = document.getElementById('dataTable');
+    const tbody = table.querySelector('tbody');
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.textContent = `Error fetching data: ${error.message}`;
+    cell.setAttribute("colspan", 100);
+    cell.style.textAlign = "center";
+    row.appendChild(cell);
+    tbody.appendChild(row);
+  });
+</script>
+
+</body>
+</html>

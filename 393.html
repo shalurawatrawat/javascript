@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Greeting</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #greeting {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Personalized Greeting App</h1>
+    <label for="userName">Your Name:</label>
+    <input type="text" id="userName" placeholder="Enter your name">
+    <br><br>
+    <label for="fontColor">Font Color:</label>
+    <input type="color" id="fontColor" value="#000000">
+    <br><br>
+    <label for="backgroundColor">Background Color:</label>
+    <input type="color" id="backgroundColor" value="#FFFFFF">
+    <br><br>
+    <button id="greetButton">Greet Me!</button>
+    <div id="greeting"></div>
+
+    <script>
+        document.getElementById('greetButton').addEventListener('click', function() {
+            const userName = document.getElementById('userName').value;
+            const fontColor = document.getElementById('fontColor').value;
+            const backgroundColor = document.getElementById('backgroundColor').value;
+            const greetingDiv = document.getElementById('greeting');
+
+            if (userName.trim() === '') {
+                greetingDiv.textContent = "Please enter your name!";
+                greetingDiv.style.color = 'red';
+                greetingDiv.style.backgroundColor = 'transparent';
+            } else {
+                greetingDiv.textContent = `Hello, ${userName}!`;
+                greetingDiv.style.color = fontColor;
+                greetingDiv.style.backgroundColor = backgroundColor;
+            }
+        });
+    </script>
+</body>
+</html>

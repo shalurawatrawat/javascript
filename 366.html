@@ -1,0 +1,56 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Aggregator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .news-item {
+            border: 1px solid #ccc;
+            padding: 15px;
+            box-shadow: 2px 2px 5px #eee;
+        }
+        .news-item img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>News Aggregator</h1>
+    <div class="news-container" id="newsContainer">
+    </div>
+
+    <script>
+        const apiKey = 'YOUR_API_KEY'; 
+        const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const newsContainer = document.getElementById('newsContainer');
+                data.articles.forEach(article => {
+                    const newsItem = document.createElement('div');
+                    newsItem.classList.add('news-item');
+                    newsItem.innerHTML = `
+                        <h2>${article.title}</h2>
+                        <img src="${article.urlToImage}" alt="${article.title}">
+                        <p>${article.description}</p>
+                        <a href="${article.url}" target="_blank">Read More</a>
+                    `;
+                    newsContainer.appendChild(newsItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>

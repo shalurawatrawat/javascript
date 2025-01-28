@@ -1,0 +1,136 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON Viewer</title>
+<style>
+body {
+  font-family: monospace;
+}
+.json-key {
+  color: blue;
+}
+.json-string {
+  color: green;
+}
+.json-number {
+  color: red;
+}
+.json-boolean {
+  color: purple;
+}
+.json-null {
+  color: gray;
+}
+.json-object, .json-array {
+  margin-left: 20px;
+}
+.collapsible {
+  cursor: pointer;
+}
+.content {
+  display: none;
+  overflow: hidden;
+}
+.content.active {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<div id="json-viewer"></div>
+
+<script>
+function createJSONElement(data) {
+  let element;
+  if (typeof data === 'object') {
+    element = document.createElement('div');
+    let type = Array.isArray(data) ? 'array' : 'object';
+    element.classList.add(`json-${type}`);
+    let toggle = document.createElement('span');
+    toggle.classList.add('collapsible');
+    toggle.textContent = (type === 'array' ? '[' : '{');
+    toggle.addEventListener('click', () => {
+      content.classList.toggle('active');
+      toggle.textContent = content.classList.contains('active') ? (type === 'array' ? '[' : '{') : (type === 'array' ? '[...]' : '{...}');
+    });
+    element.appendChild(toggle);
+    let content = document.createElement('div');
+    content.classList.add('content');
+    let entries = type === 'array' ? data.entries() : Object.entries(data);
+    for (const [key, value] of entries) {
+      let entryDiv = document.createElement('div');
+      if (type === 'object') {
+        let keySpan = document.createElement('span');
+        keySpan.classList.add('json-key');
+        keySpan.textContent = `"${key}": `;
+        entryDiv.appendChild(keySpan);
+      }
+      entryDiv.appendChild(createJSONElement(value));
+      if(type === 'array'){
+        if(data.length > 1 && data[data.length - 1] !== value){
+            entryDiv.appendChild(document.createTextNode(','));
+        }
+      }
+      content.appendChild(entryDiv);
+    }
+    
+    let closer = document.createElement('span');
+    closer.textContent = (type === 'array' ? ']' : '}');
+    content.appendChild(closer);
+    if(type === 'object'){
+    toggle.textContent = '{...}'
+    } else {
+        toggle.textContent = '[...]'
+    }
+    
+    element.appendChild(content);
+    
+
+  } else {
+    element = document.createElement('span');
+    if (typeof data === 'string') {
+      element.classList.add('json-string');
+      element.textContent = `"${data}"`;
+    } else if (typeof data === 'number') {
+      element.classList.add('json-number');
+      element.textContent = data;
+    } else if (typeof data === 'boolean') {
+      element.classList.add('json-boolean');
+      element.textContent = data;
+    } else if (data === null) {
+      element.classList.add('json-null');
+      element.textContent = 'null';
+    }
+  }
+  return element;
+}
+
+function viewJSON(jsonData, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = ''; 
+  container.appendChild(createJSONElement(jsonData));
+}
+
+const myJSONData = {
+  "name": "John Doe",
+  "age": 30,
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown",
+    "zip": "12345"
+  },
+  "phoneNumbers": [
+    {"type": "home", "number": "555-123-4567"},
+    {"type": "work", "number": "555-987-6543"}
+  ],
+  "isActive": true,
+  "car": null
+};
+
+viewJSON(myJSONData, 'json-viewer');
+</script>
+
+</body>
+</html>

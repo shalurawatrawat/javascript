@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast Player</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #podcastPlayer {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        #podcastInfo {
+            margin-bottom: 20px;
+        }
+        #audioPlayer {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #5c6bc0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3949ab;
+        }
+    </style>
+</head>
+<body>
+    <div id="podcastPlayer">
+        <div id="podcastInfo">
+            <h2>Podcast Name</h2>
+            <p id="episodeTitle">Episode Title</p>
+        </div>
+        <audio id="audioPlayer" controls></audio>
+        <button id="loadPodcast">Load Podcast</button>
+    </div>
+    <script>
+        document.getElementById('loadPodcast').addEventListener('click', function() {
+            fetch('https://api.podcastindex.org/api/1.0/podcasts/byfeedid?id=920880')
+                .then(response => response.json())
+                .then(data => {
+                    const podcast = data.podcast;
+                    const episode = podcast.feed.items[0];
+                    document.querySelector('#podcastInfo h2').textContent = podcast.feed.title;
+                    document.getElementById('episodeTitle').textContent = episode.title;
+                    document.getElementById('audioPlayer').src = episode.enclosures[0].url;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

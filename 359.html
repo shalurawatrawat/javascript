@@ -1,0 +1,39 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>File Downloader</title>
+</head>
+<body>
+
+<button id="downloadButton">Download File</button>
+
+<script>
+const downloadButton = document.getElementById('downloadButton');
+
+downloadButton.addEventListener('click', () => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'your_file.txt', true);
+  xhr.responseType = 'blob';
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const blob = xhr.response;
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'downloaded_file.txt';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }
+  };
+
+  xhr.send();
+});
+</script>
+
+</body>
+</html>

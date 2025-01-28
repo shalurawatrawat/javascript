@@ -1,0 +1,59 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather App</title>
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+  }
+  #weather {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div id="weather">
+  <h1>Weather</h1>
+  <input type="text" id="cityInput" placeholder="Enter city">
+  <button id="getWeather">Get Weather</button>
+  <div id="weatherData"></div>
+</div>
+
+<script>
+  document.getElementById('getWeather').addEventListener('click', function() {
+    const city = document.getElementById('cityInput').value;
+    const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (this.status === 200) {
+        const data = JSON.parse(this.responseText);
+        const weatherData = `
+          <h2>${data.name}, ${data.sys.country}</h2>
+          <p>Temperature: ${data.main.temp}°C</p>
+          <p>Description: ${data.weather[0].description}</p>
+          <p>Humidity: ${data.main.humidity}%</p>
+        `;
+        document.getElementById('weatherData').innerHTML = weatherData;
+      } else {
+        document.getElementById('weatherData').innerHTML = 'City not found or error occurred';
+      }
+    }
+    xhr.send();
+  });
+</script>
+
+</body>
+</html>

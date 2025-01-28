@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>File Uploader</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  #fileList {
+    margin-top: 20px;
+  }
+  .fileItem {
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>File Uploader</h1>
+
+<input type="file" id="fileInput" multiple>
+
+<div id="fileList"></div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const fileList = document.getElementById('fileList');
+
+  fileInput.addEventListener('change', handleFiles);
+
+  function handleFiles() {
+    const files = fileInput.files;
+    const fileData = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const metadata = {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified,
+      };
+
+      fileData.push(metadata);
+      displayFile(metadata);
+    }
+
+    saveToLocalStorage(fileData);
+  }
+
+  function displayFile(metadata) {
+    const fileItem = document.createElement('div');
+    fileItem.classList.add('fileItem');
+    fileItem.textContent = `Name: ${metadata.name}, Size: ${metadata.size} bytes, Type: ${metadata.type}, Last Modified: ${new Date(metadata.lastModified).toLocaleString()}`;
+    fileList.appendChild(fileItem);
+  }
+
+  function saveToLocalStorage(fileData) {
+    const existingData = JSON.parse(localStorage.getItem('uploadedFiles')) || [];
+    const newData = existingData.concat(fileData);
+    localStorage.setItem('uploadedFiles', JSON.stringify(newData));
+  }
+
+  // Load previously uploaded files on page load
+  window.addEventListener('load', () => {
+    const storedFiles = JSON.parse(localStorage.getItem('uploadedFiles')) || [];
+    storedFiles.forEach(displayFile);
+  });
+</script>
+
+</body>
+</html>

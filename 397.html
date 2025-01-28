@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stock Price Tracker</title>
+<style>
+  #stockData {
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>Stock Price Tracker</h1>
+
+<label for="symbol">Enter Stock Symbol (e.g., AAPL):</label>
+<input type="text" id="symbol" name="symbol">
+<button onclick="fetchStockData()">Get Price</button>
+
+<div id="stockData"></div>
+
+<script>
+  function fetchStockData() {
+    const symbol = document.getElementById('symbol').value.toUpperCase();
+    const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data['Global Quote']) {
+          const quote = data['Global Quote'];
+          const displayData = `
+            Symbol: ${quote['01. symbol']}<br>
+            Price: ${quote['05. price']}<br>
+            Change: ${quote['09. change']}<br>
+            Change Percent: ${quote['10. change percent']}
+          `;
+          document.getElementById('stockData').innerHTML = displayData;
+        } else {
+          document.getElementById('stockData').innerHTML = 'Invalid stock symbol or API error.';
+        }
+      })
+      .catch(error => {
+        document.getElementById('stockData').innerHTML = 'Error fetching data.';
+        console.error('Error:', error);
+      });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Multi-User App</title>
+<script>
+  function getUserData() {
+    const userId = getUserId();
+    const storedData = localStorage.getItem(userId);
+    return storedData ? JSON.parse(storedData) : {};
+  }
+
+  function saveUserData(data) {
+    const userId = getUserId();
+    localStorage.setItem(userId, JSON.stringify(data));
+  }
+
+  function getUserId() {
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+      userId = 'user-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+      localStorage.setItem('userId', userId);
+    }
+    return userId;
+  }
+
+  function updateUI() {
+    const userData = getUserData();
+    const dataDisplay = document.getElementById('dataDisplay');
+    dataDisplay.textContent = JSON.stringify(userData, null, 2);
+  }
+
+  function addItem() {
+    const newItem = document.getElementById('newItem').value;
+    if (newItem) {
+        const userData = getUserData();
+        if (!userData.items) {
+            userData.items = [];
+        }
+        userData.items.push(newItem);
+        saveUserData(userData);
+        updateUI();
+        document.getElementById('newItem').value = '';
+    }
+  }
+
+  window.onload = function() {
+    updateUI();
+  };
+</script>
+</head>
+<body>
+  <h1>Multi-User App</h1>
+  <div>
+    <label for="newItem">Add Item:</label>
+    <input type="text" id="newItem">
+    <button onclick="addItem()">Add</button>
+  </div>
+  <h2>User Data:</h2>
+  <pre id="dataDisplay"></pre>
+</body>
+</html>

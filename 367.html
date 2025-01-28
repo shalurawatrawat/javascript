@@ -1,0 +1,15 @@
+html
+<select id="myDropdown"></select>
+<script>
+  fetch('YOUR_API_ENDPOINT')
+    .then(response => response.json())
+    .then(data => {
+      const dropdown = document.getElementById('myDropdown');
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.value;
+        option.text = item.text;
+        dropdown.appendChild(option);
+      });
+    });
+</script>

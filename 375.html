@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Manager</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .tab-container {
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+        .tab {
+            background-color: #eee;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+        .tab-content {
+            padding: 20px;
+            display: none;
+            border: 1px solid #ccc;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+    </div>
+    <div class="content-container">
+    </div>
+    <script>
+        const tabContainer = document.querySelector('.tab-container');
+        const contentContainer = document.querySelector('.content-container');
+        let tabs = [];
+
+        function createTab(tabName) {
+            const tab = document.createElement('div');
+            tab.classList.add('tab');
+            tab.textContent = tabName;
+            tab.addEventListener('click', () => {
+                setActiveTab(tabName);
+            });
+            return tab;
+        }
+
+        function createTabContent(tabName) {
+            const content = document.createElement('div');
+            content.classList.add('tab-content');
+            content.textContent = `Content for ${tabName}`;
+            return content;
+        }
+
+        function setActiveTab(tabName) {
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab) {
+                activeTab.classList.remove('active');
+            }
+
+            const activeContent = document.querySelector('.tab-content.active');
+            if (activeContent) {
+                activeContent.classList.remove('active');
+            }
+
+            const tab = Array.from(tabContainer.children).find(tab => tab.textContent === tabName);
+            if (tab) {
+                tab.classList.add('active');
+            }
+           const content = Array.from(contentContainer.children).find(content => content.textContent === `Content for ${tabName}`);
+            if (content) {
+                content.classList.add('active');
+            }
+
+            localStorage.setItem('activeTab', tabName);
+        }
+
+        function loadTabs() {
+            tabs = JSON.parse(localStorage.getItem('tabs')) || [];
+            tabs.forEach(tabName => {
+                const tab = createTab(tabName);
+                const content = createTabContent(tabName);
+                tabContainer.appendChild(tab);
+                contentContainer.appendChild(content);
+            });
+            const activeTab = localStorage.getItem('activeTab');
+            if (activeTab && tabs.includes(activeTab)) {
+                setActiveTab(activeTab);
+            } else if (tabs.length > 0) {
+                setActiveTab(tabs[0]);
+            }
+        }
+
+        function addTab(tabName) {
+            if (!tabs.includes(tabName)) {
+                tabs.push(tabName);
+                localStorage.setItem('tabs', JSON.stringify(tabs));
+                const tab = createTab(tabName);
+                const content = createTabContent(tabName);
+                tabContainer.appendChild(tab);
+                contentContainer.appendChild(content);
+                setActiveTab(tabName);
+            }
+        }
+
+        addTab('Tab 1');
+        addTab('Tab 2');
+        addTab('Tab 3');
+        loadTabs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #survey-container {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+        }
+        .results {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .result-bar {
+            height: 20px;
+            background-color: lightblue;
+            margin-bottom: 5px;
+            text-align: right;
+            padding-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Survey App</h1>
+
+    <div id="survey-container">
+        </div>
+
+    <h2>Results</h2>
+    <div id="results-container">
+    </div>
+
+    <script>
+        const surveyContainer = document.getElementById('survey-container');
+        const resultsContainer = document.getElementById('results-container');
+        let surveyData = {};
+
+        const questions = [
+            { id: 'q1', text: 'How satisfied are you with our service?', options: ['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'] },
+            { id: 'q2', text: 'How likely are you to recommend us?', options: ['Very Likely', 'Likely', 'Neutral', 'Unlikely', 'Very Unlikely'] }
+        ];
+
+        function createSurvey() {
+            questions.forEach(question => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<p>${question.text}</p>`;
+
+                question.options.forEach(option => {
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = question.id;
+                    input.value = option;
+                    input.id = `${question.id}-${option.toLowerCase().replace(/\s/g, '-')}`;
+                    input.addEventListener('change', () => saveResponse(question.id, option));
+
+                    const label = document.createElement('label');
+                    label.htmlFor = input.id;
+                    label.textContent = option;
+
+                    questionDiv.appendChild(input);
+                    questionDiv.appendChild(label);
+                    questionDiv.appendChild(document.createElement('br'));
+                });
+
+                surveyContainer.appendChild(questionDiv);
+            });
+        }
+
+        function fetchResults() {
+            fetch('/get-results')
+                .then(response => response.json())
+                .then(data => {
+                    surveyData = data;
+                    updateResults();
+                })
+                .catch(error => console.error('Error fetching results:', error));
+        }
+
+        function updateResults() {
+            resultsContainer.innerHTML = '';
+            questions.forEach(question => {
+                const questionResults = surveyData[question.id] || {};
+                const resultsDiv = document.createElement('div');
+                resultsDiv.className = 'results';
+                resultsDiv.innerHTML = `<h3>${question.text}</h3>`;
+
+                let totalResponses = 0;
+                question.options.forEach(option => {
+                    totalResponses += (questionResults[option] || 0);
+                });
+
+                question.options.forEach(option => {
+                    const count = questionResults[option] || 0;
+                    const percentage = totalResponses > 0 ? (count / totalResponses) * 100 : 0;
+                    const resultBar = document.createElement('div');
+                    resultBar.className = 'result-bar';
+                    resultBar.style.width = `${percentage}%`;
+                    resultBar.textContent = `${option}: ${count}`;
+                    resultsDiv.appendChild(resultBar);
+                });
+
+                resultsContainer.appendChild(resultsDiv);
+            });
+        }
+
+        function saveResponse(questionId, response) {
+            fetch('/save-response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ questionId, response })
+            })
+            .then(response => response.json())
+            .then(data => {
+                surveyData = data;
+                updateResults();
+            })
+            .catch(error => console.error('Error saving response:', error));
+        }
+        
+        function setupMockServer() {
+        const responses = {};
+
+        const server = (req, res) => {
+            const url = new URL(req.url, 'http://localhost');
+            if (url.pathname === '/get-results') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(responses));
+            } else if (url.pathname === '/save-response') {
+            let body = '';
+            req.on('data', chunk => body += chunk.toString());
+            req.on('end', () => {
+                const data = JSON.parse(body);
+                if (!responses[data.questionId]) {
+                responses[data.questionId] = {};
+                }
+                responses[data.questionId][data.response] = (responses[data.questionId][data.response] || 0) + 1;
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(responses));
+            });
+            } else {
+            res.writeHead(404);
+            res.end();
+            }
+        };
+
+        return server;
+        }
+        
+        const server = setupMockServer();
+
+        const mockServer = require('http').createServer(server);
+        mockServer.listen(3000, () => {
+            console.log('Mock server running on http://localhost:3000');
+            createSurvey();
+            fetchResults();
+        });
+
+        
+    </script>
+</body>
+</html>

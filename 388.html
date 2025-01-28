@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            width: 700px;
+        }
+        .day {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 100px;
+        }
+        .day.today {
+            background-color: lightblue;
+        }
+        .event {
+            background-color: lightgreen;
+            margin-bottom: 5px;
+            padding: 2px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calendar App</h1>
+    <div id="calendar"></div>
+    <div id="event-form">
+        <input type="date" id="event-date">
+        <input type="text" id="event-description" placeholder="Event description">
+        <button id="add-event">Add Event</button>
+    </div>
+
+    <script>
+        const calendar = document.getElementById('calendar');
+        const eventDateInput = document.getElementById('event-date');
+        const eventDescriptionInput = document.getElementById('event-description');
+        const addEventButton = document.getElementById('add-event');
+        let selectedDate = null;
+
+        function createCalendar(year, month) {
+            calendar.innerHTML = '';
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const dayOfWeek = firstDay.getDay();
+            let date = 1;
+
+            for (let i = 0; i < 42; i++) {
+                const day = document.createElement('div');
+                day.classList.add('day');
+
+                if (i >= dayOfWeek && date <= daysInMonth) {
+                    day.textContent = date;
+                    const currentDate = new Date(year, month, date);
+                    day.addEventListener('click', () => {
+                        selectedDate = new Date(currentDate);
+                        eventDateInput.valueAsDate = selectedDate;
+                    })
+
+                    if (isToday(currentDate)) {
+                        day.classList.add('today');
+                    }
+
+                    const events = getEvents(currentDate);
+                    events.forEach(event => {
+                        const eventElement = document.createElement('div');
+                        eventElement.classList.add('event');
+                        eventElement.textContent = event;
+                        day.appendChild(eventElement);
+                    });
+
+                    date++;
+                }
+                calendar.appendChild(day);
+            }
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        }
+        function getEvents(date) {
+            const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            const eventsString = localStorage.getItem(key);
+            return eventsString ? JSON.parse(eventsString) : [];
+        }
+
+        function addEvent() {
+            if (!selectedDate || !eventDescriptionInput.value) return;
+            const date = selectedDate;
+            const description = eventDescriptionInput.value;
+            const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+            const events = getEvents(date);
+            events.push(description);
+
+            localStorage.setItem(key, JSON.stringify(events));
+            eventDescriptionInput.value = '';
+            createCalendar(date.getFullYear(), date.getMonth());
+        }
+        addEventButton.addEventListener('click', addEvent);
+        const now = new Date();
+        createCalendar(now.getFullYear(), now.getMonth());
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+    <style>
+        #chatbox {
+            width: 500px;
+            height: 300px;
+            border: 1px solid black;
+            overflow-y: scroll;
+        }
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .message.self {
+            text-align: right;
+            color: blue;
+        }
+        .message.other {
+            color: red;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat App</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="message" placeholder="Enter message">
+    <button id="send">Send</button>
+
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+
+        const socket = new WebSocket('ws://localhost:8080'); // Replace with your server address
+
+        socket.addEventListener('open', () => {
+            console.log('WebSocket connection opened');
+        });
+
+        socket.addEventListener('message', (event) => {
+            const message = JSON.parse(event.data);
+            addMessage(message.text, message.sender);
+        });
+
+        socket.addEventListener('close', () => {
+            console.log('WebSocket connection closed');
+        });
+
+        sendButton.addEventListener('click', () => {
+            const text = messageInput.value.trim();
+            if (text) {
+                sendMessage(text);
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        function sendMessage(text) {
+            const message = {
+                text: text,
+                sender: 'self',
+            };
+            addMessage(message.text, message.sender)
+            socket.send(JSON.stringify(message));
+            
+            saveMessages(text);
+        }
+
+        function addMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(sender);
+            messageElement.textContent = text;
+            chatbox.appendChild(messageElement);
+            chatbox.scrollTop = chatbox.scrollHeight; 
+        }
+
+        function loadMessages(){
+            const loadedMessages = localStorage.getItem('chatMessages');
+            if(loadedMessages){
+                const messages = JSON.parse(loadedMessages)
+                for (let i = 0; i < messages.length; i++){
+                    addMessage(messages[i].text, 'other')
+                }
+            }
+        }
+
+        function saveMessages(message){
+            let currentMessages = localStorage.getItem('chatMessages')
+            if(currentMessages === null){
+                currentMessages = [];
+            }else{
+                currentMessages = JSON.parse(currentMessages)
+            }
+            currentMessages.push({text: message});
+            localStorage.setItem('chatMessages', JSON.stringify(currentMessages));
+        }
+
+        loadMessages();
+    </script>
+</body>
+</html>

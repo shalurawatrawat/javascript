@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Video Player</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  video {
+    width: 640px;
+    height: 360px;
+  }
+</style>
+</head>
+<body>
+
+<h2>My Video Player</h2>
+
+<video id="myVideo" controls>
+  <source src="your-video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<script>
+  const video = document.getElementById('myVideo');
+  const localStorageKey = 'videoPlaybackPosition';
+
+  // Load playback position from localStorage
+  window.addEventListener('load', () => {
+    const savedPosition = localStorage.getItem(localStorageKey);
+    if (savedPosition !== null) {
+      video.currentTime = parseFloat(savedPosition);
+    }
+  });
+
+  // Save playback position to localStorage on pause
+  video.addEventListener('pause', () => {
+    localStorage.setItem(localStorageKey, video.currentTime.toString());
+  });
+
+  //Save playback position before unloading
+    window.addEventListener('beforeunload', () => {
+    localStorage.setItem(localStorageKey, video.currentTime.toString());
+  });
+</script>
+
+</body>
+</html>

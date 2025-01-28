@@ -1,0 +1,38 @@
+html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Form Submission</title>
+<script>
+function submitData() {
+  var xhr = new XMLHttpRequest();
+  var url = "your_server_endpoint"; // Replace with your server endpoint
+  var data = new FormData(document.getElementById("myForm"));
+
+  xhr.open("POST", url, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log(xhr.responseText);
+      alert("Data submitted successfully!");
+    } else if (xhr.readyState === 4) {
+      console.error("Error submitting data:", xhr.status);
+      alert("Error submitting data!");
+    }
+  };
+  xhr.send(data);
+  return false; // Prevent page reload
+}
+</script>
+</head>
+<body>
+
+<form id="myForm" onsubmit="return submitData()">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name"><br><br>
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email"><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

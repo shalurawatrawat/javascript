@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <body>
+            <form id="feedbackForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea><br><br>
+                <button type="submit">Send Feedback</button>
+            </form>
+            
+            <script>
+                const form = document.getElementById('feedbackForm');
+                form.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+                    fetch('/submit-feedback', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Feedback sent successfully!');
+                            form.reset();
+                        } else {
+                            alert('Failed to send feedback.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred.');
+                    });
+                });
+            </script>             
+
+        </body>
+    </head>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Session Tracker</title>
+</head>
+<body>
+    <div class="Container">
+        <div class="btn">
+        <button onclick="startGame()">Start Game</button>
+        <button onclick="endGame()">End Game</button>
+        <button onclick="restGame()">Rest Game</button>
+        </div>
+        <div class="info">
+            <h3>Session Info 0 </h3>
+            <p>Games Played 0</p>
+            <p>Current Score: 0</p>
+            <p>Session Duration: 0 seconds</p>
+        </div>
+    </div>
+   <script>
+        let count=1;
+        function startGame(){
+          count++;
+          let value=count-1;
+          sessionStorage.setItem("gamesPlayed",value);
+          console.log(value);   
+          let gamePlayed=sessionStorage.getItem("gamesPlayed");
+          document.querySelector("p").innerHTML=`Games Played ${value}`;
+        }
+   </script>
+</body>
+</html>

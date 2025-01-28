@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bookmark Manager</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+#bookmarks {
+  width: 500px;
+  margin: 0 auto;
+}
+.bookmark-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+.bookmark-item a {
+  flex-grow: 1;
+  text-decoration: none;
+}
+.category {
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<div id="bookmarks">
+  <h2>Add Bookmark</h2>
+  <div>
+    <label for="url">URL:</label>
+    <input type="url" id="url" required>
+  </div>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+  </div>
+    <div>
+        <label for="category">Category:</label>
+        <input type="text" id="category" value="Uncategorized">
+    </div>
+  <button onclick="addBookmark()">Add</button>
+
+  <h2>Bookmarks</h2>
+  <div id="bookmarkList">
+    </div>
+</div>
+
+<script>
+function addBookmark() {
+  const url = document.getElementById('url').value;
+  const name = document.getElementById('name').value;
+    const category = document.getElementById('category').value || 'Uncategorized';
+  
+  if (url && name) {
+    const bookmark = { url, name, category };
+    saveBookmark(bookmark);
+    displayBookmarks();
+    document.getElementById('url').value = '';
+    document.getElementById('name').value = '';
+      document.getElementById('category').value = 'Uncategorized';
+  } else {
+    alert('Please enter both URL and Name.');
+  }
+}
+
+function saveBookmark(bookmark) {
+  let bookmarks = localStorage.getItem('bookmarks');
+  bookmarks = bookmarks ? JSON.parse(bookmarks) : [];
+  bookmarks.push(bookmark);
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+}
+
+function deleteBookmark(index) {
+  let bookmarks = localStorage.getItem('bookmarks');
+  bookmarks = bookmarks ? JSON.parse(bookmarks) : [];
+  bookmarks.splice(index, 1);
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  displayBookmarks();
+}
+
+function displayBookmarks() {
+    let bookmarks = localStorage.getItem('bookmarks');
+    bookmarks = bookmarks ? JSON.parse(bookmarks) : [];
+    const bookmarkList = document.getElementById('bookmarkList');
+    bookmarkList.innerHTML = '';
+    
+    const categorizedBookmarks = {};
+    bookmarks.forEach(bookmark => {
+        if(!categorizedBookmarks[bookmark.category]){
+            categorizedBookmarks[bookmark.category] = [];
+        }
+        categorizedBookmarks[bookmark.category].push(bookmark);
+    });
+
+    for(const category in categorizedBookmarks){
+        const categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('category');
+        categoryDiv.innerHTML = `<h3>${category}</h3>`;
+        bookmarkList.appendChild(categoryDiv);
+        categorizedBookmarks[category].forEach((bookmark, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('bookmark-item');
+            const link = document.createElement('a');
+            link.href = bookmark.url;
+            link.textContent = bookmark.name;
+            link.target = '_blank';
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = () => deleteBookmark(bookmarks.indexOf(bookmark));
+            itemDiv.appendChild(link);
+            itemDiv.appendChild(deleteButton);
+            categoryDiv.appendChild(itemDiv);
+        });
+    }
+}
+
+displayBookmarks();
+</script>
+
+</body>
+</html>

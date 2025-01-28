@@ -1,0 +1,58 @@
+
+<script>
+  const dragItems = document.querySelectorAll('.drag-item');
+  const dropZones = document.querySelectorAll('.drop-zone');
+
+  let draggedItem = null;
+
+  dragItems.forEach(item => {
+    item.addEventListener('dragstart', (event) => {
+      draggedItem = item;
+      event.dataTransfer.setData('text/plain', item.id);
+    });
+
+    item.addEventListener('dragend', () => {
+      draggedItem = null;
+    });
+  });
+
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (event) => {
+      event.preventDefault();
+    });
+
+    zone.addEventListener('drop', (event) => {
+      event.preventDefault();
+      const itemId = event.dataTransfer.getData('text/plain');
+      const item = document.getElementById(itemId);
+      zone.appendChild(item);
+      saveState();
+    });
+  });
+
+  function saveState() {
+    const state = {};
+    dropZones.forEach(zone => {
+      state[zone.id] = Array.from(zone.children).map(child => child.id);
+    });
+    localStorage.setItem('dragDropState', JSON.stringify(state));
+  }
+
+  function loadState() {
+    const savedState = localStorage.getItem('dragDropState');
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      Object.keys(state).forEach(zoneId => {
+        const zone = document.getElementById(zoneId);
+        state[zoneId].forEach(itemId => {
+          const item = document.getElementById(itemId);
+          if (item) {
+            zone.appendChild(item);
+          }
+        });
+      });
+    }
+  }
+
+  loadState();
+</script>

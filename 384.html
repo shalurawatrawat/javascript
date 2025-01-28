@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Dashboard</title>
+    <style>
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .dashboard-item {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container"></div>
+
+    <script>
+        function loadDashboard() {
+            const container = document.querySelector(".dashboard-container");
+            container.innerHTML = '';
+
+            // Load data from session storage
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                const value = sessionStorage.getItem(key);
+                createDashboardItem(container, key, value, 'Session');
+            }
+
+            // Load data from local storage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                createDashboardItem(container, key, value, 'Local');
+            }
+        }
+
+        function createDashboardItem(container, key, value, storageType) {
+            const item = document.createElement('div');
+            item.classList.add('dashboard-item');
+            item.innerHTML = `
+                <h3>${key}</h3>
+                <p>${value}</p>
+                <p><small>${storageType} Storage</small></p>
+            `;
+            container.appendChild(item);
+        }
+
+        // Example of adding data to storage (for demonstration)
+        sessionStorage.setItem('sessionData1', 'Data from Session 1');
+        sessionStorage.setItem('sessionData2', 'Data from Session 2');
+        localStorage.setItem('localData1', 'Data from Local 1');
+        localStorage.setItem('localData2', 'Data from Local 2');
+
+        loadDashboard();
+    </script>
+</body>
+</html>

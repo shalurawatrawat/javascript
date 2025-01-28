@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <script>
+
+async function fetchData(url) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Data fetched successfully:', data);
+    return data;
+  } catch (error) {
+
+    console.error('An error occurred:', error.message);
+    return null;
+  }
+}
+
+// Example usage
+const apiUrl = 'https://api.example.com/data';
+
+fetchData(apiUrl)
+  .then((data) => {
+    if (data) {
+    
+      console.log('Fetched data:', data);
+    } else {
+      console.log('Failed to fetch data.');
+    }
+  });
+
+
+
+
+    </script>
+    
+</body>
+</html>
